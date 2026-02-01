@@ -4,74 +4,74 @@
 ![Latest Release](https://img.shields.io/github/v/release/LigindaLeg/LigindaryAPI?style=for-the-badge&logo=github)
 ![License](https://img.shields.io/github/license/LigindaLeg/LigindaryAPI?style=for-the-badge)
 
-**LigindaryAPI** — это вспомогательная библиотека (API), созданная для расширения возможностей плагинов, разработанных на базе **LabAPI**. Её цель — предоставить разработчикам удобный и мощный инструментарий для упрощения распространенных задач, таких как управление кастомными эффектами, работа с консольными командами и взаимодействие с игроками.
+**LigindaryAPI** is an auxiliary library (API) created to expand the capabilities of plug—ins developed on the basis of **LabAPI**. Its goal is to provide developers with convenient and powerful tools to simplify common tasks such as managing custom effects, working with console commands, and interacting with players.
 
-## Ключевые особенности
+## Key Features
 
-*   **🚀 Удобное API для команд:** Упрощенная регистрация и обработка консольных команд с помощью чистого и читаемого кода.
-*   **🧙‍♂️ Управление кастомными эффектами:** Легко создавайте, выдавайте и удаляйте кастомные эффекты для игроков.
-*   **🛠️ Вспомогательные методы:** Набор полезных методов-расширений (extension methods) для безопасной работы с данными.
-*   **🔌 Расширяемость:** API спроектировано так, чтобы его было легко дополнять новыми функциями.
+*   **🚀 A convenient API for commands:** Simplified registration and processing of console commands using clean and readable code.
+* **🧙♂️ Custom effects management:** Easily create, give and remove custom effects for players.
+*   **🛠️ Auxiliary methods:** A set of useful extension methods for working with data securely.
+* **🔌 Extensibility:** The API is designed to be easy to add new features to.
 
-## Установка
+## Installation
 
-### Для владельцев серверов
+### For server owners
 
-1.  Перейдите в раздел [**Releases**](https://github.com/LigindaLeg/LigindaryAPI/releases).
-2.  Скачайте последнюю версию `LigindaryAPI-LabAPI.dll`.
-3.  Поместите скачанный файл в папку с плагинами вашего сервера.
+1. Go to [**Releases**](https://github.com/LigindaLeg/LigindaryAPI/releases ).
+2. Download the latest version `
+LigindaryAPI-LabAPI.dll 3. Place the downloaded file in the plug-in folder of your server.
 
-## Примеры использования
+## Usage examples
 
-Ниже приведен пример, демонстрирующий возможности API.
+Below is an example demonstrating the API features.
 
-### Создание кастомных эффектов
+### Create custom effects
 
-Создайте обработчик команд, который будет управлять логикой выдачи, удаления и просмотра эффектов.
+Create a command handler that will manage the logic of issuing, deleting, and viewing effects.
 
 ```csharp
 public class ExampleEffect : CustomEffect
 {
     public string Name => "ExampleEffect";
 
-    public string Description => "Пример кастомного эффекта";
+    public string Description => "Example of a custom effect";
     
     public void OnGive(Player player, float duration)
     {
-        // Вставьте сюда функции эффекта, которые происходят при выдаче эффекта
-    }
+// Insert the effect functions that occur when the effect is applied here
+}
 
     public void OnRemove(Player player)
     {
-         // Вставьте сюда функции эффекта, которые происходят при снятии эффекта
-    }
+         // Insert here the effect functions that occur when the effect is removed
+}
 }
 ```
 
-## API Справка (Краткая)
+## API Help (Short)
 
-| Метод / Класс | Описание |
+| Method / Class | Description |
 | :--- | :--- |
-| `CustomEffect.GiveToPlayer(player, duration)` | Выдает эффект игроку на заданную длительность. |
-| `Player.Hint(text, duration, y, x)` | Показывает игроку текст на экране (Внимание! ДЛя этой функции, нужно иметь [HintServiceMeow](https://github.com/MeowServer/HintServiceMeowhttps://github.com/MeowServer/HintServiceMeow)). |
-| `RegisterEffect(CustomEffect)` | Регистрирует новый кастомный эффект в системе. |
-| `string.IsCustomEffect()` | Проверяет, существует ли эффект с таким именем. |
-| `string.ToCustomEffect()` | Преобразует имя эффекта в его объект. |
+| ` CustomEffect.GiveToPlayer(player, duration)` | Gives the effect to the player for a set duration. |
+| `Player.Hint(text, duration, y, x)` | Shows the player the text on the screen (Attention! For this function, you need to have [HintServiceMeow](https://github.com/MeowServer/HintServiceMeowhttps://github.com/MeowServer/HintServiceMeow)). |
+| `RegisterEffect(CustomEffect)` | Registers a new custom effect in the system. |
+| `string.IsCustomEffect()` | Checks if there is an effect with the same name. |
+| `string.ToCustomEffect()` | Converts the name of the effect into its object. |
 
-## Как внести вклад
+## How to contribute
 
-Мы приветствуем любой вклад в развитие проекта! Если вы хотите помочь:
+We welcome any contribution to the development of the project! If you want to help:
 
-1.  **Сообщайте об ошибках:** Если вы нашли баг, пожалуйста, создайте новое [Issue](https://github.com/LigindaLeg/LigindaryAPI/issues) с подробным описанием.
-2.  **Предлагайте идеи:** Есть идея для новой функции? Создайте [Issue](https://github.com/LigindaLeg/LigindaryAPI/issues) и опишите её.
-3.  **Отправляйте Pull Request'ы:**
-    *   Сделайте форк репозитория.
-    *   Создайте новую ветку (`git checkout -b feature/AmazingFeature`).
-    *   Внесите свои изменения.
-    *   Закоммитьте изменения (`git commit -m 'Add some AmazingFeature'`).
-    *   Отправьте изменения в свою ветку (`git push origin feature/AmazingFeature`).
-    *   Откройте **Pull Request**.
+1. **Report errors:** If you find a bug, please create a new [Issue](https://github.com/LigindaLeg/LigindaryAPI/issues ) with a detailed description.
+2. **Offer ideas:** Do you have an idea for a new feature? Create an [Issue](https://github.com/LigindaLeg/LigindaryAPI/issues ) and describe it.
+3. **Send Pull Requests:**
+    * Make a fork of the repository.
+    * Create a new branch (`git checkout -b feature/AmazingFeature').
+    * Make your changes.
+    * Commit the changes ('git commit -m 'Add some amazing Feature').
+    * Submit changes to your branch ('git push origin feature/AmazingFeature').
+    * Open **Pull Request**.
 
-## Лицензия
+## License
 
-Этот проект лицензирован под лицензией Creative Commons. Подробности смотрите в файле `LICENSE`.
+This project is licensed under a Creative Commons license. For more information, see the `LICENSE` file.
