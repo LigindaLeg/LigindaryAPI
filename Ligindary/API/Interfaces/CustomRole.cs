@@ -1,3 +1,6 @@
+using Ligindary.API.Spawning;
+using Ligindary.API;
+
 namespace Ligindary.API.Interfaces;
 
 public interface CustomRole
@@ -11,6 +14,16 @@ public interface CustomRole
     /// Описание роли.
     /// </summary>
     string Description { get;}
+    
+    /// <summary>
+    /// Имя игрока за эту роль.
+    /// </summary>
+    string DisplayName { get;}
+    
+    /// <summary>
+    /// Кастом инфо игрока за эту роль.
+    /// </summary>
+    string CustomInfo { get;}
     
     /// <summary>
     /// Тип Роли.
@@ -38,9 +51,24 @@ public interface CustomRole
     ushort AltHealth { get;}
     
     /// <summary>
+    /// Локация для спавна.
+    /// </summary>
+    SpawnLocation SpawnLocation { get;}
+    
+    /// <summary>
+    /// Шанс спавна.
+    /// </summary>
+    int SpawnChance { get;}
+    
+    /// <summary>
+    /// Флаги для спавна.
+    /// </summary>
+    RoleSpawnFlags SpawnFlags { get;}
+    
+    /// <summary>
     /// Вызывается при спавне.
     /// </summary>
-    void OnGive(Player player, float duration);
+    void OnGive(Player player);
     
     /// <summary>
     /// Вызывается при деспавне.

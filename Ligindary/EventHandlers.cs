@@ -1,5 +1,6 @@
 using System.Linq;
 using HintServiceMeow.Core.Extension;
+using Ligindary.API.Features.NBT;
 
 namespace Ligindary;
 
@@ -10,6 +11,8 @@ public static class EventHandlers
         FpcServerPositionDistributor.RoleSyncEvent += Events.RoleSyncEvent;
         PlayerEvents.ChangedRole += Events.ChangedRole;
         PlayerEvents.ChangedItem += Events.ChangedItem;
+        PlayerEvents.Joined += Events.Joined;
+        PlayerEvents.Left += Events.Left;
     }
     
     public static void UnRegisterEvents()
@@ -17,6 +20,8 @@ public static class EventHandlers
         FpcServerPositionDistributor.RoleSyncEvent -= Events.RoleSyncEvent;
         PlayerEvents.ChangedRole -= Events.ChangedRole;
         PlayerEvents.ChangedItem -= Events.ChangedItem;
+        PlayerEvents.Joined -= Events.Joined;
+        PlayerEvents.Left -= Events.Left;
     }
 
     private static class Events
@@ -40,6 +45,20 @@ public static class EventHandlers
             Lists.CIHints.Remove(e.Player);
             Lists.CIHints.Add(e.Player, e.Player.Hint(Main.Instance.Config!.CustomItemSelectHint.Replace("[itemName]", e.NewItem!.CustomItem()!.Name).Replace("[itemDesc]", e.NewItem!.CustomItem()!.Description), 5f));
             Timing.CallDelayed(5f, delegate() { Lists.CIHints.Remove(e.Player);});
+        }
+
+        public static void Joined(PlayerJoinedEventArgs e)
+        {
+            if (e.Player == null)
+                return;
+            e.Player.AddOrSetNbtTag("HasCustomRole", false);
+        }
+
+        public static void Left(PlayerLeftEventArgs e)
+        {
+            if (e.Player == null)
+                return;
+            NbtTagStorage.Clear(e.Player);
         }
     }
 }
