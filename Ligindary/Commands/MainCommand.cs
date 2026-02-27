@@ -15,6 +15,7 @@ public class MainCommand : ParentCommand
     {
         RegisterCommand(new ChangeAppearance());
         RegisterCommand(new CustomEffect.CustomEffect());
+        RegisterCommand(new CustomItem.CustomItem());
     }
     
     protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)

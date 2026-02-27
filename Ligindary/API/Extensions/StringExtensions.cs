@@ -36,4 +36,20 @@ public static class StringExtensions
     {
         return Lists.CustomEffects.FirstOrDefault(effect => text == effect.Name);
     }
+    
+    /// <summary>
+    /// Является ли текст кастомным предметом?
+    /// </summary>
+    public static bool IsCustomItem(this string text)
+    {
+        return Lists.CustomItems.Any(item => text == item.Name);
+    }
+    
+    /// <summary>
+    /// Конвертирует текст в кастомный эффект.
+    /// </summary>
+    public static CustomItem ToCustomItem(this string text)
+    {
+        return Lists.CustomItems.FirstOrDefault(item => text == item.Name);
+    }
 }

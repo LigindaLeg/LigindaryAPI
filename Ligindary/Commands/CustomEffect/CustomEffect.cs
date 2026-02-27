@@ -20,7 +20,7 @@ public class CustomEffect : ICommand
         if (args.Count < 1)
         {
             response = "Использование: \n" +
-                       "lapi ce give (ID Игрока) (Эффект) (Длительность) - Выдаёт роль игроку.\n" +
+                       "lapi ce give (ID Игрока) (Эффект) (Длительность) - Выдаёт эффект игроку.\n" +
                        "lapi ce list - Выводит список всех доступных кастомных эффектов.\n" +
                        "lapi ce rm (ID Игрока) (Эффект) - Снимает кастомный эффект у игрока.";
             return false;

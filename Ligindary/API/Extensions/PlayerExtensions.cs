@@ -1,3 +1,6 @@
+using System.Linq;
+using HintServiceMeow.Core.Extension;
+
 namespace Ligindary.Extensions;
 
 public static class PlayerExtensions
@@ -10,7 +13,7 @@ public static class PlayerExtensions
     /// <summary>
     /// Показывает хинт через HintServiceMeow.
     /// </summary>
-    public static void Hint(this Player player, string text, float duration, float? y = null, float? x = null)
+    public static Hint Hint(this Player player, string text, float duration, float? y = null, float? x = null)
     {
         // bool hsm = false;
         // foreach (var dep in LabApi.Loader.PluginLoader.Dependencies)
@@ -35,8 +38,11 @@ public static class PlayerExtensions
             YCoordinate = y ?? 700,
         };
         var pd = PlayerDisplay.Get(player);
+
+        
         pd.AddHint(hint);
-        Timing.CallDelayed(duration, delegate() { pd.RemoveHint(hint); });
+        Timing.CallDelayed(duration, delegate() { pd.RemoveHint(hint);});
+        return hint;
     }
 
     /// <summary>
@@ -79,4 +85,57 @@ public static class PlayerExtensions
         }
     }
     
+    /// <summary>
+    /// Выдать кастомный эффект игроку.
+    /// </summary>
+    public static void GiveCustomItem(this Player player, CustomItem item)
+    {
+        item.OnGive(player); 
+        item.RegisterEvents();
+        foreach (var v in Lists.CIHints.Where(v => v.Key == player))
+        {
+            player.RemoveHint(v.Value);
+        }
+        Lists.CustomItemsSerials.Add(item, player.AddItem(item.ItemType).Serial);
+        Lists.CIHints.Add(player, player.Hint(Main.Instance.Config!.CustomItemGiveHint.Replace("[itemName]", item.Name).Replace("[itemDesc]", item.Description), 5f));
+        Timing.CallDelayed(5f, delegate() { Lists.CIHints.Remove(player);});
+    }
+
+    /// <summary>
+    /// Убрать кастомный предмет игроку.
+    /// </summary>
+    public static void RemoveCustomItem(this Player player, CustomItem item)
+    {
+        item.OnRemove(player);
+        item.UnregisterEvents();
+        foreach (var ci in player.Inventory.UserInventory.Items)
+        {
+            if (Lists.CustomItemsSerials[item] == ci.Key)
+            {
+                Item.Get(ci.Key)!.DropItem().Destroy();
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Убрать все кастомные предметы игрокам.
+    /// </summary>
+    public static void RemoveAllCustomItems()
+    {
+        foreach (var player in Player.List)
+        {
+            foreach (var item in Lists.CustomItems)
+            {
+                player.RemoveCustomItem(item);
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Проверяет, есть ли эффект у игрока.
+    /// </summary>
+    public static bool HasCustomEffect(this Player player, CustomEffect effect)
+    {
+        return Lists.PlayerCustomEffects.Any(eff => eff.Key == player && eff.Value == effect);
+    }
 }

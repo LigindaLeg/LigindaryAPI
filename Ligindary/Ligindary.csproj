@@ -65,17 +65,28 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="API\CustomEffects\Scp1499.cs" />
         <Compile Include="API\Extensions\CustomEffectExtensions.cs" />
+        <Compile Include="API\Extensions\CustomItemExtensions.cs" />
+        <Compile Include="API\Extensions\ItemExtensions.cs" />
+        <Compile Include="API\Extensions\PickupExtensions.cs" />
         <Compile Include="API\Extensions\PlayerExtensions.cs" />
         <Compile Include="API\Extensions\RoleTypeIdExtensions.cs" />
         <Compile Include="API\Extensions\StringExtensions.cs" />
+        <Compile Include="API\Features\CustomEffects\Scp1499.cs" />
+        <Compile Include="API\Features\CustomItems\Knife.cs" />
+        <Compile Include="API\Features\CustomItems\NVG.cs" />
+        <Compile Include="API\Features\CustomItems\Scp1499Item.cs" />
+        <Compile Include="API\Features\CustomItems\Stick.cs" />
         <Compile Include="API\Interfaces\CustomEffect.cs" />
+        <Compile Include="API\Interfaces\CustomItem.cs" />
         <Compile Include="API\Interfaces\CustomRole.cs" />
         <Compile Include="API\Wrappers\Appearance.cs" />
         <Compile Include="Commands\Appearance\ChangeAppearance.cs" />
         <Compile Include="Commands\CustomEffect\CustomEffect.cs" />
+        <Compile Include="Commands\CustomItem\CustomItem.cs" />
+        <Compile Include="Commands\Hint.cs" />
         <Compile Include="Commands\MainCommand.cs" />
+        <Compile Include="Config.cs" />
         <Compile Include="EventHandlers.cs" />
         <Compile Include="Lists.cs" />
         <Compile Include="Main.cs" />
@@ -85,7 +96,7 @@
         <Compile Include="Usings\Global.cs" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="API\Features\" />
+      <Folder Include="API\Features\CustomRoles\" />
     </ItemGroup>
     <ItemGroup>
       <Content Include=".gitignore" />

@@ -22,5 +22,6 @@ global using Ligindary.Wrappers;
 global using Footprinting;
 global using Ligindary.API.Interfaces;
 global using Utils;
+global using CustomPlayerEffects;
 
 namespace Ligindary.Usings;

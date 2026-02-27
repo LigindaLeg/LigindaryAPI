@@ -1,3 +1,6 @@
+using System.Linq;
+using HintServiceMeow.Core.Extension;
+
 namespace Ligindary;
 
 public static class EventHandlers
@@ -6,12 +9,14 @@ public static class EventHandlers
     {
         FpcServerPositionDistributor.RoleSyncEvent += Events.RoleSyncEvent;
         PlayerEvents.ChangedRole += Events.ChangedRole;
+        PlayerEvents.ChangedItem += Events.ChangedItem;
     }
     
     public static void UnRegisterEvents()
     {
         FpcServerPositionDistributor.RoleSyncEvent -= Events.RoleSyncEvent;
         PlayerEvents.ChangedRole -= Events.ChangedRole;
+        PlayerEvents.ChangedItem -= Events.ChangedItem;
     }
 
     private static class Events
@@ -21,5 +26,20 @@ public static class EventHandlers
             Lists.Appearance.ContainsKey(Player.Get(hub)) ? Lists.Appearance[Player.Get(hub)] : role;
 
         public static void ChangedRole(PlayerChangedRoleEventArgs e) => Lists.Appearance.Remove(e.Player);
+
+        public static void ChangedItem(PlayerChangedItemEventArgs e)
+        {
+            if (e.NewItem == null)
+                return;
+            if (!e.NewItem.IsCustomItem())
+                return;
+            foreach (var v in Lists.CIHints.Where(v => v.Key == e.Player))
+            {
+                e.Player.RemoveHint(v.Value);
+            }
+            Lists.CIHints.Remove(e.Player);
+            Lists.CIHints.Add(e.Player, e.Player.Hint(Main.Instance.Config!.CustomItemSelectHint.Replace("[itemName]", e.NewItem!.CustomItem()!.Name).Replace("[itemDesc]", e.NewItem!.CustomItem()!.Description), 5f));
+            Timing.CallDelayed(5f, delegate() { Lists.CIHints.Remove(e.Player);});
+        }
     }
 }
