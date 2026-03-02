@@ -71,6 +71,11 @@ public static class EventHandlers
 
         public static void RoundStarted()
         {
+            foreach (var d in Door.List)
+            {
+                d.IsOpened = true;
+                d.IsOpened = false;
+            }
             Timing.CallDelayed(1f, delegate()
             {
                 foreach (var r in Ligindary.Lists.CustomRoles)
