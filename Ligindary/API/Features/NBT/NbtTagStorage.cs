@@ -40,4 +40,9 @@ public static class NbtTagStorage
     {
         _data.Remove(player.UserId);
     }
+
+    public static void ClearAll()
+    {
+        _data.Clear();
+    }
 }

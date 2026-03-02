@@ -64,11 +64,11 @@ public class CustomItem : ICommand
             {
                 if (!Lists.CustomItems.Any())
                 {
-                    response = "Доступные эффекты отсутствуют.";
+                    response = "Доступные предметы отсутствуют.";
                     break;
                 }
                 var itemLines = Lists.CustomItems.Select(item => $"{item.Name} - {item.Description}");
-                response = "Доступные эффекты:\n" + string.Join("\n", itemLines);
+                response = "Доступные предметы:\n" + string.Join("\n", itemLines);
                 break;
             }
             case "rm" or "remove":
@@ -101,7 +101,7 @@ public class CustomItem : ICommand
                 }
                 var item = itemName.ToCustomItem();
                 player1.RemoveCustomItem(item);
-                response = $"Предмет '{item.Name}' успешно снят с игрока {player1.Nickname}.";
+                response = $"Предмет '{item.Name}' успешно забран у игрока {player1.Nickname}.";
                 break;
             }
             default:

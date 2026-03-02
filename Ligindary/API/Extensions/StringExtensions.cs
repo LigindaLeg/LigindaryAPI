@@ -52,4 +52,20 @@ public static class StringExtensions
     {
         return Lists.CustomItems.FirstOrDefault(item => text == item.Name);
     }
+    
+    /// <summary>
+    /// Является ли текст кастомной ролью?
+    /// </summary>
+    public static bool IsCustomRole(this string text)
+    {
+        return Lists.CustomRoles.Any(role => text == role.Name);
+    }
+    
+    /// <summary>
+    /// Конвертирует текст в кастомную роль.
+    /// </summary>
+    public static CustomRole ToCustomRole(this string text)
+    {
+        return Lists.CustomRoles.FirstOrDefault(role => text == role.Name);
+    }
 }

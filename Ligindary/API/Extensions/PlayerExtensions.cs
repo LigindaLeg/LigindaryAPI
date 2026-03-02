@@ -2,6 +2,7 @@ using System.Linq;
 using System.Security.Cryptography.Xml;
 using HintServiceMeow.Core.Extension;
 using Ligindary.API.Features.NBT;
+using UnityEngine;
 
 namespace Ligindary.Extensions;
 
@@ -99,7 +100,7 @@ public static class PlayerExtensions
             player.RemoveHint(v.Value);
         }
         Lists.CustomItemsSerials.Add(item, player.AddItem(item.ItemType).Serial);
-        Lists.CIHints.Add(player, player.Hint(Main.Instance.Config!.CustomItemGiveHint.Replace("[itemName]", item.Name).Replace("[itemDesc]", item.Description), 5f));
+        Lists.CIHints.Add(player, player.Hint(Main.Instance.Config!.CustomItemGiveHint.Replace("[itemName]", item.Name).Replace("[itemDesc]", item.Description), 10f));
         Timing.CallDelayed(5f, delegate() { Lists.CIHints.Remove(player);});
     }
 
@@ -141,41 +142,14 @@ public static class PlayerExtensions
         return Lists.PlayerCustomEffects.Any(eff => eff.Key == player && eff.Value == effect);
     }
     
-    /// <summary>
-    /// Добавляет NBT тэг игроку.
-    /// </summary>
-    /// <param name="player">Игрок</param>
-    /// <param name="key">Имя тэга</param>
-    /// <param name="value">Данные тэга</param>
-    /// <returns></returns>
-    public static bool AddOrSetNbtTag(this Player player, string key, object value)
-    {
-        if (NbtTagStorage.HasTag(player, key))
-            return false;
-        NbtTagStorage.AddOrSetTag(player, key, value);
-        return true;
-    }
-    
-    /// <summary>
-    /// Получает NBT тэг игрока.
-    /// </summary>
-    /// <param name="player">Игрок</param>
-    /// <param name="key">Имя тэга</param>
-    /// <typeparam name="T">Тип тэга</typeparam>
-    /// <returns></returns>
-    public static T GetNbtTag<T>(this Player player, string key)
-    {
-        return NbtTagStorage.GetTag<T>(player, key);
-    }
-    
     public static CustomRole GiveCustomRole(this Player player, CustomRole role)
     {
-        player.AddOrSetNbtTag("HasCustomRole", true);
-        role.OnGive(player);
-        role.RegisterEvents();
         player.SetRole(role.RoleType, RoleChangeReason.RemoteAdmin, role.SpawnFlags);
-        player.Position = role.SpawnLocation.Room.Room.Position + role.SpawnLocation.Room.localPosition;
-        player.Rotation = role.SpawnLocation.Room.localRotation;
+        NbtTagStorage.AddOrSetTag(player, "HasCustomRole", true);
+        Lists.PlayerCustomRoles.Add(player, role);
+        var roomTransform = role.SpawnLocation.Room.Room.Transform;
+        player.Position = roomTransform.TransformPoint(role.SpawnLocation.Room.localPosition);
+        player.Rotation = roomTransform.rotation * role.SpawnLocation.Room.localRotation;
         player.Health = role.Health;
         player.MaxHealth = role.Health;
         player.ArtificialHealth = role.AltHealth;
@@ -187,20 +161,37 @@ public static class PlayerExtensions
 
         player.CustomInfo = role.CustomInfo;
         player.DisplayName = role.DisplayName;
+        player.Scale = role.Size;
+        foreach (var v in Lists.CIHints.Where(v => v.Key == player))
+        {
+            player.RemoveHint(v.Value);
+        }
+        Lists.CIHints.Add(player, player.Hint(Main.Instance.Config!.CustomRoleSpawnedHint.Replace("[roleName]", role.Name).Replace("[roleDesc]", role.Description), 15f));
+        Timing.CallDelayed(5f, delegate() { Lists.CIHints.Remove(player);});
+        role.OnGive(player);
+        role.RegisterEvents();
         return role;
     }
 
-    public static void RemoveCustomRole(this Player player, CustomRole role)
+    public static void RemoveCustomRole(this Player player, CustomRole role, bool forceToSpectator = true)
     {
-        if (!player.GetNbtTag<bool>("HasCustomRole"))
+        foreach (var v in Lists.CIHints.Where(v => v.Key == player))
+        {
+            player.RemoveHint(v.Value);
+        }
+        if (!NbtTagStorage.GetTag<bool>(player, "HasCustomRole"))
             return;
-        player.AddOrSetNbtTag("HasCustomRole", false);
-        role.OnRemove(player);
-        role.UnregisterEvents();
-        player.SetRole(RoleTypeId.Spectator);
+        NbtTagStorage.AddOrSetTag(player, "HasCustomRole", false);
+        if (forceToSpectator)
+        {
+            player.SetRole(RoleTypeId.Spectator);
+        }
         player.DisplayName = "";
         player.CustomInfo = "";
         player.MaxHealth = 100;
-        
+        player.Scale = new Vector3(1, 1, 1);
+        Lists.PlayerCustomRoles.Remove(player);
+        role.OnRemove(player);
+        role.UnregisterEvents();
     }
 }

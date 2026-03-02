@@ -31,6 +31,11 @@ public class Lists
     public static List<CustomRole> CustomRoles { get; } = new();
     
     /// <summary>
+    /// Список кастомных ролей.
+    /// </summary>
+    public static Dictionary<Player, CustomRole> PlayerCustomRoles { get; } = new();
+    
+    /// <summary>
     /// Список сериалов кастомных предметов.
     /// </summary>
     public static Dictionary<CustomItem, ushort> CustomItemsSerials { get; } = new();

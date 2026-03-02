@@ -16,6 +16,8 @@ public class MainCommand : ParentCommand
         RegisterCommand(new ChangeAppearance());
         RegisterCommand(new CustomEffect.CustomEffect());
         RegisterCommand(new CustomItem.CustomItem());
+        RegisterCommand(new CustomRoles.CustomRole());
+        RegisterCommand(new GetLocalRoomPosition());
     }
     
     protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)

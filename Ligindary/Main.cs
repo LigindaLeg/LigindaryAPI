@@ -1,6 +1,8 @@
 using Ligindary.API;
 using Ligindary.API.CustomEffects;
 using Ligindary.API.Features.CustomItems;
+using Ligindary.API.Features.CustomRoles;
+using Ligindary.API.Features.NBT;
 
 namespace Ligindary;
 
@@ -32,6 +34,10 @@ public class Main : Plugin<Config>
         CustomItemExtensions.RegisterItem(new NVG());
         CustomItemExtensions.RegisterItem(new Scp1499Item());
         CustomItemExtensions.RegisterItem(new Stick());
+        if (Instance.Config.IsSCP999Enabled)
+        {
+            CustomRoleExtensions.RegisterRole(new Scp999());
+        }
     }
 
     public override void Disable()
@@ -42,6 +48,8 @@ public class Main : Plugin<Config>
         Lists.Appearance.Clear();
         Lists.CustomItems.Clear();
         Lists.CustomItemsSerials.Clear();
+        Lists.CustomRoles.Clear();
+        NbtTagStorage.ClearAll();
         Instance = null;
     }
 }

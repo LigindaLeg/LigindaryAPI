@@ -9,4 +9,10 @@ public class Config
     
     [Description("CustomItems Translations / CustomItem Selected")]
     public string CustomItemSelectHint { get; set; } = "Вы взяли [itemName].\n[itemDesc]";
+    
+    [Description("CustomRoles Translations / CustomRole Spawned")]
+    public string CustomRoleSpawnedHint { get; set; } = "Вы были заспавнены за [roleName].\n[roleDesc]";
+    
+    [Description("CustomRoles Settings / SCP999")]
+    public bool IsSCP999Enabled { get; set; } = true;
 }

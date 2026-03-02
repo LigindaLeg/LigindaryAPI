@@ -1,5 +1,6 @@
 using Ligindary.API.Spawning;
 using Ligindary.API;
+using UnityEngine;
 
 namespace Ligindary.API.Interfaces;
 
@@ -64,6 +65,11 @@ public interface CustomRole
     /// Флаги для спавна.
     /// </summary>
     RoleSpawnFlags SpawnFlags { get;}
+    
+    /// <summary>
+    /// Размер роли.
+    /// </summary>
+    Vector3 Size { get; }
     
     /// <summary>
     /// Вызывается при спавне.

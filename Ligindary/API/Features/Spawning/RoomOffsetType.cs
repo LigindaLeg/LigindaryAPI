@@ -6,6 +6,6 @@ namespace Ligindary.API.Spawning;
 
 public static class RoomOffsetType
 {
-    public static readonly RoomOffset Example =
-        new RoomOffset(Room.Get(RoomName.Outside).First(), new Vector3(0,0,0), new Quaternion(0,0,0,0));
+    public static readonly RoomOffset Gr18 =
+        new RoomOffset(Room.Get(RoomName.LczGlassroom).First(), new Vector3(4.3f,1f,2f), new Quaternion(0,0,0,0));
 }

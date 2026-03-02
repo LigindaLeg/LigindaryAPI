@@ -13,6 +13,7 @@ public static class EventHandlers
         PlayerEvents.ChangedItem += Events.ChangedItem;
         PlayerEvents.Joined += Events.Joined;
         PlayerEvents.Left += Events.Left;
+        ServerEvents.RoundStarted += Events.RoundStarted;
     }
     
     public static void UnRegisterEvents()
@@ -22,6 +23,7 @@ public static class EventHandlers
         PlayerEvents.ChangedItem -= Events.ChangedItem;
         PlayerEvents.Joined -= Events.Joined;
         PlayerEvents.Left -= Events.Left;
+        ServerEvents.RoundStarted -= Events.RoundStarted;
     }
 
     private static class Events
@@ -30,8 +32,14 @@ public static class EventHandlers
             NetworkWriter networkWriter) =>
             Lists.Appearance.ContainsKey(Player.Get(hub)) ? Lists.Appearance[Player.Get(hub)] : role;
 
-        public static void ChangedRole(PlayerChangedRoleEventArgs e) => Lists.Appearance.Remove(e.Player);
-
+        public static void ChangedRole(PlayerChangedRoleEventArgs e)
+        {
+            Lists.Appearance.Remove(e.Player);
+            if (!NbtTagStorage.GetTag<bool>(e.Player, "HasCustomRole"))
+                return;
+            e.Player.RemoveCustomRole(Lists.PlayerCustomRoles[e.Player], false);
+        }
+        
         public static void ChangedItem(PlayerChangedItemEventArgs e)
         {
             if (e.NewItem == null)
@@ -43,7 +51,7 @@ public static class EventHandlers
                 e.Player.RemoveHint(v.Value);
             }
             Lists.CIHints.Remove(e.Player);
-            Lists.CIHints.Add(e.Player, e.Player.Hint(Main.Instance.Config!.CustomItemSelectHint.Replace("[itemName]", e.NewItem!.CustomItem()!.Name).Replace("[itemDesc]", e.NewItem!.CustomItem()!.Description), 5f));
+            Lists.CIHints.Add(e.Player, e.Player.Hint(Main.Instance.Config!.CustomItemSelectHint.Replace("[itemName]", e.NewItem!.CustomItem()!.Name).Replace("[itemDesc]", e.NewItem!.CustomItem()!.Description), 10f));
             Timing.CallDelayed(5f, delegate() { Lists.CIHints.Remove(e.Player);});
         }
 
@@ -51,7 +59,7 @@ public static class EventHandlers
         {
             if (e.Player == null)
                 return;
-            e.Player.AddOrSetNbtTag("HasCustomRole", false);
+            NbtTagStorage.AddOrSetTag(e.Player, "HasCustomRole", false);
         }
 
         public static void Left(PlayerLeftEventArgs e)
@@ -59,6 +67,21 @@ public static class EventHandlers
             if (e.Player == null)
                 return;
             NbtTagStorage.Clear(e.Player);
+        }
+
+        public static void RoundStarted()
+        {
+            Timing.CallDelayed(1f, delegate()
+            {
+                foreach (var r in Ligindary.Lists.CustomRoles)
+                {
+                    if (r.SpawnChance <= UnityEngine.Random.Range(0, 100))
+                    {
+                        Player.ReadyList.ElementAt(UnityEngine.Random.Range(0, Player.ReadyList.Count()))
+                            .GiveCustomRole(r);
+                    }
+                }
+            });
         }
     }
 }
